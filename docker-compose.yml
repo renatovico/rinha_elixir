@@ -1,0 +1,68 @@
+x-api: &api
+  build: .
+  image: renatovico/rinha-elixir:latest
+  volumes:
+    - sock:/run/sock
+  deploy:
+    resources:
+      limits:
+        cpus: "0.40"
+        memory: "160MB"
+
+services:
+  haproxy:
+    image: haproxy:2.9-alpine
+    user: root
+    ports:
+      - "9999:9999"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+      - sock:/run/sock
+    deploy:
+      resources:
+        limits:
+          cpus: "0.20"
+          memory: "30MB"
+    depends_on:
+      api1:
+        condition: service_healthy
+      api2:
+        condition: service_healthy
+
+  api1:
+    <<: *api
+    hostname: api1
+    environment:
+      SOCKET_PATH: /run/sock/api1.sock
+      SHARED_DATA_PATH: "/app/references.bin"
+      ERL_CRASH_DUMP_SECONDS: "0"
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /tmp/ready"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+      start_period: 5s
+    cpuset: "0,1"
+
+  api2:
+    <<: *api
+    hostname: api2
+    environment:
+      SOCKET_PATH: /run/sock/api2.sock
+      SHARED_DATA_PATH: "/app/references.bin"
+      ERL_CRASH_DUMP_SECONDS: "0"
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /tmp/ready"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+      start_period: 5s
+    cpuset: "2,3"
+
+volumes:
+  sock:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: "size=4m,mode=0777"
