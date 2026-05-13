@@ -1,6 +1,6 @@
 x-api: &api
   build: .
-  image: renatovico/rinha-elixir:latest
+  image: renatoelias/rinha-elixir:latest
   volumes:
     - sock:/run/sock
   deploy:
