@@ -1,5 +1,5 @@
 x-api: &api
-  image: renatovico/rinha-elixir:latest
+  image: renatoelias/rinha-elixir:latest
   volumes:
     - sock:/run/sock
   deploy:
