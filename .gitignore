@@ -1,0 +1,12 @@
+/_build/
+/deps/
+/priv/
+/resources/
+/test/
+/.elixir_ls/
+/cover/
+/doc/
+/tmp/
+erl_crash.dump
+*.ez
+*.bin
