@@ -29,7 +29,7 @@ rinha-*.tar
 resources/
 
 # k6 test data (27MB)
-test/k6/test-data.json
+# test/k6/test-data.json
 
 # Rust build artifacts
 /native/knn_nif/target/
