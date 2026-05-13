@@ -24,6 +24,8 @@ rinha-*.tar
 
 # Reference data binary
 *.bin
+!priv/model_params.bin
+!priv/knn_specialist.bin
 resources/
 
 # k6 test data (27MB)
